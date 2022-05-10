@@ -81,6 +81,8 @@ def f x = { x + x }
 def g x = { x * x }
 
 var h = f . g
+def h = { g . g }
+
 
 h(2)
 ```
