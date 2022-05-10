@@ -43,9 +43,11 @@
 
 <app> ::=
 	<INT> | <STR> | <list>
-    | <LID> | <UID>
+    | <LID> | <call> | <UID>
     | <O_PAREN> <aAdd> <C_PAREN>
     | <map>
+
+<call> ::= <LID> <O_PAREN> <aAdd> <C_PAREN>
 
 <map> ::= <MAP> <aAdd> <TO> <O_CURLY> <branches> <C_CURLY>
 
