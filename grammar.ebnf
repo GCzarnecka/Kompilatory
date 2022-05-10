@@ -4,12 +4,23 @@
 	<definitions> <definition>
     | <definition>
    
-<definition> ::= 
-	<var>
+<definition> ::=
+	<comment>
+	| <var>
     | <def>
     | <data>
+
+<comment> ::=
+	<SINGLE_COMMENT>
+    | <MULTILINE_COMMENT>
     
-<def> ::= <DEF> <LID> <lowercaseParams> <EQUAL> <O_CURLY> <aAdd> <C_CURLY>
+
+<def> ::= 
+	<DEF> <LID> <lowercaseParams> <EQUAL> <O_CURLY> <opperations> <C_CURLY>
+
+<opperations> ::=
+	<comp>
+    | <aAdd>
 
 <lowercaseParams> ::=
 	E
@@ -23,12 +34,15 @@
 <aMul> ::=
 	<aMul> <TIMES> <app>
     | <aMul> <DIVIDE> <app>
+    | <index_at>
+
+<index_at> ::=
+	<LID> <AT> <aAdd>
+    | <list> <AT> <aAdd>
     | <app>
 
-<app> ::= <app> <appBase> | <appBase>
-
-<appBase> ::=
-	<INT> | <STR>
+<app> ::=
+	<INT> | <STR> | <list>
     | <LID> | <UID>
     | <O_PAREN> <aAdd> <C_PAREN>
     | <map>
@@ -58,7 +72,35 @@
 <uppercaseParams> ::=
 	E
     | <uppercaseParams> <UID>
+    
+<var> ::= <VAR> <LID> <EQUAL> <opperations>
 
+<list> ::= <O_SQUARE> <elements> <C_SQUARE>
+
+<elements> ::=
+	E
+	| <int_elements>
+    | <str_elements>
+
+<int_elements> ::=
+	<int_elements> <COMMA> <INT>
+    | <INT>
+    
+<str_elements> ::=
+	<str_elements> <COMMA> <STR>
+    | <STR>
+
+<comp> ::=
+	<apply> <LID> <COMP> <LID>
+    | <apply>
+    
+<apply> ::=
+	E
+    | <apply> <LID> <COMP>
+
+<SINGLE_COMMENT> ::= "\/\/[^\n]*"
+<MULTILINE_COMMENT> ::= "/\*[^*]*\*+(?:[^/*][^*]*\*+)*/"
+<VAR> ::= "var"
 <DATA> ::= "data"
 <DEF> ::= "def"
 <MAP> ::= "map"
@@ -66,10 +108,14 @@
 <EQUAL> ::= "="
 <COMMA> ::= ","
 <ARROW> ::= "\->"
-<O_CURLY> ::= "{"
-<C_CURLY> ::= "}"
-<O_PAREN> ::= "("
-<C_PAREN> ::= ")"
+<AT> ::= "@"
+<COMP> ::= "\."
+<O_CURLY> ::= "\{"
+<C_CURLY> ::= "\}"
+<O_PAREN> ::= "\("
+<C_PAREN> ::= "\)"
+<O_SQUARE> ::= "\["
+<C_SQUARE> ::= "\]"
 <PLUS> ::= "\+"
 <MIN> ::= "\-"
 <TIMES> ::= "\*"
@@ -78,3 +124,4 @@
 <STR> ::= "\"[^\"]*\""
 <LID> ::= "[a-z][a-zA-Z_]*"
 <UID> ::= "[A-Z][a-zA-Z_]*"
+
