@@ -1,0 +1,80 @@
+<program> ::= <definitions>
+
+<definitions> ::=
+	<definitions> <definition>
+    | <definition>
+   
+<definition> ::= 
+	<var>
+    | <def>
+    | <data>
+    
+<def> ::= <DEF> <LID> <lowercaseParams> <EQUAL> <O_CURLY> <aAdd> <C_CURLY>
+
+<lowercaseParams> ::=
+	E
+    | <lowercaseParams> <LID>
+
+<aAdd> ::=
+	<aAdd> <PLUS> <aMul>
+    | <aAdd> <MIN> <aMul>
+    | <aMul>
+
+<aMul> ::=
+	<aMul> <TIMES> <app>
+    | <aMul> <DIVIDE> <app>
+    | <app>
+
+<app> ::= <app> <appBase> | <appBase>
+
+<appBase> ::=
+	<INT> | <STR>
+    | <LID> | <UID>
+    | <O_PAREN> <aAdd> <C_PAREN>
+    | <map>
+
+<map> ::= <MAP> <aAdd> <TO> <O_CURLY> <branches> <C_CURLY>
+
+<branches> ::=
+	<branches> <branch>
+    | <branch>
+    
+<branch> ::=
+	<pattern> <ARROW> <O_CURLY> <aAdd> <C_CURLY>
+    
+<pattern> ::=
+	<LID>
+    | <UID> <lowercaseParams>
+    
+<data> ::= <DATA> <UID> <EQUAL> <O_CURLY> <constructors> <C_CURLY>
+
+<constructors> ::=
+	<constructors> <COMMA> <constructor>
+    | <constructor>
+
+<constructor> ::=
+	<UID> <uppercaseParams>
+    
+<uppercaseParams> ::=
+	E
+    | <uppercaseParams> <UID>
+
+<DATA> ::= "data"
+<DEF> ::= "def"
+<MAP> ::= "map"
+<TO> ::= "to"
+<EQUAL> ::= "="
+<COMMA> ::= ","
+<ARROW> ::= "\->"
+<O_CURLY> ::= "{"
+<C_CURLY> ::= "}"
+<O_PAREN> ::= "("
+<C_PAREN> ::= ")"
+<PLUS> ::= "\+"
+<MIN> ::= "\-"
+<TIMES> ::= "\*"
+<DIVIDE> ::= "\/"
+<INT> ::= "[0-9]+"
+<STR> ::= "\"[^\"]*\""
+<LID> ::= "[a-z][a-zA-Z_]*"
+<UID> ::= "[A-Z][a-zA-Z_]*"
