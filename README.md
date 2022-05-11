@@ -47,7 +47,7 @@ Out:
 ```
 map value to {
     Null -> { 0 }
-    4 -> { 6 }
+    some_var_name -> { 6 }
 }
 ```
 
