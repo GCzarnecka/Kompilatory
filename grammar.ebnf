@@ -80,17 +80,16 @@
 <list> ::= <O_SQUARE> <elements> <C_SQUARE>
 
 <elements> ::=
-	E
-	| <int_elements>
-    | <str_elements>
+	<inner_lists>
+    | <values>
 
-<int_elements> ::=
-	<int_elements> <COMMA> <INT>
-    | <INT>
-    
-<str_elements> ::=
-	<str_elements> <COMMA> <STR>
-    | <STR>
+<inner_lists> ::=
+	<inner_lists> <COMMA> <list>
+    | <list>
+
+<values> ::=
+	<values> <COMMA> <INT> | <values> <COMMA> <STR>
+    | <INT> | <STR>
 
 <comp> ::=
 	<apply> <LID> <COMP> <LID>
