@@ -51,7 +51,7 @@ map value to {
 }
 ```
 
-### deklaracja stuktury danych (tabeli)
+### deklaracja tabeli
 
 ```
 var list = [0, 1, 2, 3]
