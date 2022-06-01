@@ -13,7 +13,7 @@
 
 [ \n]+ {}
 \/\/[^\n]* { return yy::parser::make_SINGLE_COMMENT(); }
-/\*[^*]*\*+(?:[^/*][^*]*\*+)*/ { return yy::parser::make_MULTILINE_COMMENT(); }
+\/\*[^*]*\*+(?:[^/*][^*]*\*+)*/ { return yy::parser::make_MULTILINE_COMMENT(); }
 \+ { return yy::parser::make_PLUS(); }
 \* { return yy::parser::make_TIMES(); }
 - { return yy::parser::make_MINUS(); }
