@@ -9,6 +9,8 @@ extern yy::parser::symbol_type yylex();
 
 %}
 
+%token <std::string> SINGLE_COMMENT
+%token <std::string> MULTILINE_COMMENT
 %token PLUS
 %token TIMES
 %token MINUS
@@ -37,7 +39,7 @@ extern yy::parser::symbol_type yylex();
 %type <std::vector<branch_ptr>> branches
 %type <std::vector<constructor_ptr>> constructors
 %type <ast_ptr> aAdd aMul case app appBase
-%type <definition_ptr> definition defn data 
+%type <definition_ptr> definition comment defn data 
 %type <branch_ptr> branch
 %type <pattern_ptr> pattern
 %type <constructor_ptr> constructor
@@ -56,8 +58,14 @@ definitions
     ;
 
 definition
-    : defn { $$ = std::move($1); }
+    :  comment { $$ = std::move($1); }
+    | defn { $$ = std::move($1); }
     | data { $$ = std::move($1); }
+    ;
+
+comment
+    : SINGLE_COMMENT { $$ = definition_ptr(new definition_comment(std::move($1))); }
+    | MULTILINE_COMMENT { $$ = definition_ptr(new definition_comment(std::move($1))); }
     ;
 
 defn

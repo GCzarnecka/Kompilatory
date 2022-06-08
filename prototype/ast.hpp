@@ -41,6 +41,13 @@ struct definition {
 
 using definition_ptr = std::unique_ptr<definition>;
 
+struct definition_comment : public definition {
+    std::string text;
+
+    explicit definition_comment(std::string t)
+        : text(std::move(t)) {}
+};
+
 enum binop {
     PLUS,
     MINUS,
@@ -115,9 +122,7 @@ struct definition_defn : public definition {
     ast_ptr body;
 
     definition_defn(std::string n, std::vector<std::string> p, ast_ptr b)
-        : name(std::move(n)), params(std::move(p)), body(std::move(b)) {
-
-    }
+        : name(std::move(n)), params(std::move(p)), body(std::move(b)) {}
 };
 
 struct definition_data : public definition {

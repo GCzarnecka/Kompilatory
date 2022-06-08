@@ -12,6 +12,8 @@
 %%
 
 [ \n]+ {}
+\/\/[^\n]* { return yy::parser::make_SINGLE_COMMENT(std::string(yytext)); }
+\/\*[^*]*\\*+(?:[^\/*][^*]*\\*+)\*\/ { return yy::parser::make_MULTILINE_COMMENT(std::string(yytext)); }
 \+ { return yy::parser::make_PLUS(); }
 \* { return yy::parser::make_TIMES(); }
 - { return yy::parser::make_MINUS(); }
