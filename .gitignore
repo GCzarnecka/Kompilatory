@@ -5,3 +5,6 @@
 **/scanner.cpp
 **/scanner.o
 **/a.out
+**/parser.png
+**/parser.tab.cc
+**/parser.dot
