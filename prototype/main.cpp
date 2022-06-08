@@ -10,5 +10,5 @@ extern std::vector<definition_ptr> program;
 int main() {
     yy::parser parser;
     parser.parse();
-    std::cout << program.size() << std::endl;
+    std::cout << "Program size: " << program.size() << std::endl;
 }
