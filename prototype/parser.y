@@ -18,8 +18,8 @@ extern yy::parser::symbol_type yylex();
 %token <int> INT
 %token DEF
 %token DATA
-%token CASE
-%token OF
+%token MAP
+%token TO
 %token OCURLY
 %token CCURLY
 %token OPAREN
@@ -38,7 +38,7 @@ extern yy::parser::symbol_type yylex();
 %type <std::vector<definition_ptr>> program definitions
 %type <std::vector<branch_ptr>> branches
 %type <std::vector<constructor_ptr>> constructors
-%type <ast_ptr> aAdd aMul case app appBase
+%type <ast_ptr> aAdd aMul map app appBase
 %type <definition_ptr> definition comment def data 
 %type <branch_ptr> branch
 %type <pattern_ptr> pattern
@@ -106,12 +106,12 @@ appBase
     | LID { $$ = ast_ptr(new ast_lid(std::move($1))); }
     | UID { $$ = ast_ptr(new ast_uid(std::move($1))); }
     | OPAREN aAdd CPAREN { $$ = std::move($2); }
-    | case { $$ = std::move($1); }
+    | map { $$ = std::move($1); }
     ;
 
-case
-    : CASE aAdd OF OCURLY branches CCURLY 
-        { $$ = ast_ptr(new ast_case(std::move($2), std::move($5))); }
+map
+    : MAP aAdd TO OCURLY branches CCURLY 
+        { $$ = ast_ptr(new ast_map(std::move($2), std::move($5))); }
     ;
 
 branches

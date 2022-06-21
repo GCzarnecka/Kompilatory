@@ -105,13 +105,13 @@ struct ast_app : public ast
         : left(std::move(l)), right(std::move(r)) {}
 };
 
-struct ast_case : public ast
+struct ast_map : public ast
 {
-    ast_ptr of;
+    ast_ptr to;
     std::vector<branch_ptr> branches;
 
-    ast_case(ast_ptr o, std::vector<branch_ptr> b)
-        : of(std::move(o)), branches(std::move(b)) {}
+    ast_map(ast_ptr o, std::vector<branch_ptr> b)
+        : to(std::move(o)), branches(std::move(b)) {}
 };
 
 struct pattern_var : public pattern

@@ -21,8 +21,8 @@
 [0-9]+ { return yy::parser::make_INT(atoi(yytext)); }
 def { return yy::parser::make_DEF(); }
 data { return yy::parser::make_DATA(); }
-case { return yy::parser::make_CASE(); }
-of { return yy::parser::make_OF(); }
+map { return yy::parser::make_MAP(); }
+to { return yy::parser::make_TO(); }
 \{ { return yy::parser::make_OCURLY(); }
 \} { return yy::parser::make_CCURLY(); }
 \( { return yy::parser::make_OPAREN(); }
