@@ -1,0 +1,5 @@
+def add x y = { x + y }
+
+def double x = { add x x }
+
+def main = { double 163 }
