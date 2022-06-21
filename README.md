@@ -74,7 +74,7 @@ def function_name x = { x - 1 }
 ### 4. Wywołanie funkcji
 
 ```
-def times_two x = { x * 2 } 
+def times_two x = { x * 2 }
 
 times_two(5)
 ```
