@@ -57,12 +57,10 @@ wieloliniowy
 */
 ```
 
-
-### 2. Deklaracja zmiennej
+### 2. Deklaracja zmiennej w postaci stałej funkcji
 
 ```
-var variable_name = 3
-var text = "Hello, World!"
+def magic_number = { 7 }
 ```
 
 ### 3. Deklaracja funkcji
@@ -76,7 +74,7 @@ def function_name x = { x - 1 }
 ```
 def times_two x = { x * 2 }
 
-times_two(5)
+def main = { times_two 5 }
 ```
 
 Out:
@@ -89,44 +87,19 @@ Out:
 ```
 map value to {
     Null -> { 0 }
-    some_var_name -> { 6 }
+    Const x xs -> { x }
 }
 ```
 
-### 6. deklaracja tabeli
-
-```
-var list = [0, 1, 2, 3]
-
-var empty_list = []
-```
-
-### 7. Indexing
-
-```
-list @ 2
-list @ 4
-list @ variable_name
-```
-
-Out:
-```
->> 2
->> Null
->> 3
-```
-
-### 8. Złożenie
+### 6. Złożenie
 
 ```
 def f x = { x + x }
 def g x = { x * x }
 
-var h = f . g
-def h = { g . g }
+def h x = { f g x }
 
-
-h(2)
+def main = { h 2 }
 ```
 
 Out:
@@ -134,8 +107,21 @@ Out:
 >> 8
 ```
 
-### 9. Definicja struktury danych
+### 7. Definicja struktury danych
 
 ```
 data List = { Null, Cons Int List }
+```
+
+## Przykład poprawnego programu
+
+```
+data List = { Null, Cons Int List }
+
+def length l = {
+    map l to {
+        Null -> { 0 }
+        Cons x xs -> { 1 + length xs }
+    }
+}
 ```
