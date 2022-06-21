@@ -3,19 +3,22 @@
 #include <vector>
 #include <string>
 
-struct ast {
+struct ast
+{
     virtual ~ast() = default;
 };
 
 using ast_ptr = std::unique_ptr<ast>;
 
-struct pattern {
+struct pattern
+{
     virtual ~pattern() = default;
 };
 
 using pattern_ptr = std::unique_ptr<pattern>;
 
-struct branch {
+struct branch
+{
     pattern_ptr pat;
     ast_ptr expr;
 
@@ -25,7 +28,8 @@ struct branch {
 
 using branch_ptr = std::unique_ptr<branch>;
 
-struct constructor {
+struct constructor
+{
     std::string name;
     std::vector<std::string> types;
 
@@ -35,49 +39,56 @@ struct constructor {
 
 using constructor_ptr = std::unique_ptr<constructor>;
 
-struct definition {
+struct definition
+{
     virtual ~definition() = default;
 };
 
 using definition_ptr = std::unique_ptr<definition>;
 
-struct definition_comment : public definition {
+struct definition_comment : public definition
+{
     std::string text;
 
     explicit definition_comment(std::string t)
         : text(std::move(t)) {}
 };
 
-enum binop {
+enum binop
+{
     PLUS,
     MINUS,
     TIMES,
     DIVIDE
 };
 
-struct ast_int : public ast {
+struct ast_int : public ast
+{
     int value;
 
     explicit ast_int(int v)
         : value(v) {}
 };
 
-struct ast_lid : public ast {
+struct ast_lid : public ast
+{
     std::string id;
 
     explicit ast_lid(std::string i)
         : id(std::move(i)) {}
 };
 
-struct ast_uid : public ast {
+struct ast_uid : public ast
+{
     std::string id;
 
     explicit ast_uid(std::string i)
         : id(std::move(i)) {}
 };
 
-struct ast_binop : public ast {
-    binop op;  
+struct ast_binop : public ast
+{
+    binop op;
     ast_ptr left;
     ast_ptr right;
 
@@ -85,7 +96,8 @@ struct ast_binop : public ast {
         : op(o), left(std::move(l)), right(std::move(r)) {}
 };
 
-struct ast_app : public ast {
+struct ast_app : public ast
+{
     ast_ptr left;
     ast_ptr right;
 
@@ -93,7 +105,8 @@ struct ast_app : public ast {
         : left(std::move(l)), right(std::move(r)) {}
 };
 
-struct ast_case : public ast {
+struct ast_case : public ast
+{
     ast_ptr of;
     std::vector<branch_ptr> branches;
 
@@ -101,14 +114,16 @@ struct ast_case : public ast {
         : of(std::move(o)), branches(std::move(b)) {}
 };
 
-struct pattern_var : public pattern {
+struct pattern_var : public pattern
+{
     std::string var;
 
     pattern_var(std::string v)
         : var(std::move(v)) {}
 };
 
-struct pattern_constr : public pattern {
+struct pattern_constr : public pattern
+{
     std::string constr;
     std::vector<std::string> params;
 
@@ -116,16 +131,18 @@ struct pattern_constr : public pattern {
         : constr(std::move(c)), params(std::move(p)) {}
 };
 
-struct definition_defn : public definition {
+struct definition_def : public definition
+{
     std::string name;
     std::vector<std::string> params;
     ast_ptr body;
 
-    definition_defn(std::string n, std::vector<std::string> p, ast_ptr b)
+    definition_def(std::string n, std::vector<std::string> p, ast_ptr b)
         : name(std::move(n)), params(std::move(p)), body(std::move(b)) {}
 };
 
-struct definition_data : public definition {
+struct definition_data : public definition
+{
     std::string name;
     std::vector<constructor_ptr> constructors;
 

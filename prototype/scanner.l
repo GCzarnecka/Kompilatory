@@ -19,7 +19,7 @@
 - { return yy::parser::make_MINUS(); }
 \/ { return yy::parser::make_DIVIDE(); }
 [0-9]+ { return yy::parser::make_INT(atoi(yytext)); }
-defn { return yy::parser::make_DEFN(); }
+def { return yy::parser::make_DEF(); }
 data { return yy::parser::make_DATA(); }
 case { return yy::parser::make_CASE(); }
 of { return yy::parser::make_OF(); }

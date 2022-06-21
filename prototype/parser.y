@@ -16,7 +16,7 @@ extern yy::parser::symbol_type yylex();
 %token MINUS
 %token DIVIDE
 %token <int> INT
-%token DEFN
+%token DEF
 %token DATA
 %token CASE
 %token OF
@@ -39,7 +39,7 @@ extern yy::parser::symbol_type yylex();
 %type <std::vector<branch_ptr>> branches
 %type <std::vector<constructor_ptr>> constructors
 %type <ast_ptr> aAdd aMul case app appBase
-%type <definition_ptr> definition comment defn data 
+%type <definition_ptr> definition comment def data 
 %type <branch_ptr> branch
 %type <pattern_ptr> pattern
 %type <constructor_ptr> constructor
@@ -59,7 +59,7 @@ definitions
 
 definition
     :  comment { $$ = std::move($1); }
-    | defn { $$ = std::move($1); }
+    | def { $$ = std::move($1); }
     | data { $$ = std::move($1); }
     ;
 
@@ -68,10 +68,10 @@ comment
     | MULTILINE_COMMENT { $$ = definition_ptr(new definition_comment(std::move($1))); }
     ;
 
-defn
-    : DEFN LID lowercaseParams EQUAL OCURLY aAdd CCURLY
+def
+    : DEF LID lowercaseParams EQUAL OCURLY aAdd CCURLY
         { $$ = definition_ptr(
-            new definition_defn(std::move($2), std::move($3), std::move($6))); }
+            new definition_def(std::move($2), std::move($3), std::move($6))); }
     ;
 
 lowercaseParams
