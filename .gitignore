@@ -8,3 +8,7 @@
 **/parser.png
 **/parser.tab.cc
 **/parser.dot
+**/ast.o
+**/env.o
+**/definition.o
+**/type.o
