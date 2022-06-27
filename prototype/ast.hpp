@@ -133,10 +133,15 @@ struct ast_case : public ast
     std::vector<branch_ptr> branches;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     ast_map(ast_ptr o, std::vector<branch_ptr> b)
         : to(std::move(o)), branches(std::move(b)) {}
 
     type_ptr typecheck(type_mgr &mgr, const type_env &env) const;
+=======
+    ast_case(ast_ptr o, std::vector<branch_ptr> b)
+        : of(std::move(o)), branches(std::move(b)) {}
+>>>>>>> parent of 78cd0c0 (Change CASE OF tokens to MAP TO respectively)
 =======
     ast_case(ast_ptr o, std::vector<branch_ptr> b)
         : of(std::move(o)), branches(std::move(b)) {}
