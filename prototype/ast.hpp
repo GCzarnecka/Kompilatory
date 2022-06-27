@@ -127,15 +127,20 @@ struct ast_app : public ast
     type_ptr typecheck(type_mgr &mgr, const type_env &env) const;
 };
 
-struct ast_map : public ast
+struct ast_case : public ast
 {
-    ast_ptr to;
+    ast_ptr of;
     std::vector<branch_ptr> branches;
 
+<<<<<<< HEAD
     ast_map(ast_ptr o, std::vector<branch_ptr> b)
         : to(std::move(o)), branches(std::move(b)) {}
 
     type_ptr typecheck(type_mgr &mgr, const type_env &env) const;
+=======
+    ast_case(ast_ptr o, std::vector<branch_ptr> b)
+        : of(std::move(o)), branches(std::move(b)) {}
+>>>>>>> parent of 78cd0c0 (Change CASE OF tokens to MAP TO respectively)
 };
 
 struct pattern_var : public pattern
