@@ -134,7 +134,7 @@ case some_data_type of
 def f x = { x + x }
 def g x = { x * x }
 
-def h x = { f g x }
+def h x = { f (g x) }
 
 def main = { h 2 }
 ```
@@ -145,7 +145,7 @@ Haskell:
 f x = x + x
 g x = x * x
 
-h x = (f . g) x
+h x = f (g x)
 
 h 2
 ```
