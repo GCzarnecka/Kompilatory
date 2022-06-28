@@ -13,3 +13,5 @@
 **/definition.o
 **/type.o
 .vscode/
+haskell_out_files/*
+!haskell_out_files/*.hs
