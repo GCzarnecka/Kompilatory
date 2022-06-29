@@ -6,6 +6,7 @@
 struct ast
 {
     virtual ~ast() = default;
+    virtual void print(int indent, std::ostream& to) const = 0;
 };
 
 using ast_ptr = std::unique_ptr<ast>;
@@ -13,6 +14,7 @@ using ast_ptr = std::unique_ptr<ast>;
 struct pattern
 {
     virtual ~pattern() = default;
+    virtual void print(std::ostream& to) const = 0;
 };
 
 using pattern_ptr = std::unique_ptr<pattern>;
@@ -68,6 +70,7 @@ struct ast_int : public ast
 
     explicit ast_int(int v)
         : value(v) {}
+    void print(int indent, std::ostream& to) const;
 };
 
 struct ast_lid : public ast
@@ -76,6 +79,7 @@ struct ast_lid : public ast
 
     explicit ast_lid(std::string i)
         : id(std::move(i)) {}
+    void print(int indent, std::ostream& to) const;
 };
 
 struct ast_uid : public ast
@@ -84,6 +88,7 @@ struct ast_uid : public ast
 
     explicit ast_uid(std::string i)
         : id(std::move(i)) {}
+    void print(int indent, std::ostream& to) const;
 };
 
 struct ast_binop : public ast
@@ -94,6 +99,7 @@ struct ast_binop : public ast
 
     ast_binop(binop o, ast_ptr l, ast_ptr r)
         : op(o), left(std::move(l)), right(std::move(r)) {}
+    void print(int indent, std::ostream& to) const;
 };
 
 struct ast_app : public ast
@@ -103,6 +109,7 @@ struct ast_app : public ast
 
     ast_app(ast_ptr l, ast_ptr r)
         : left(std::move(l)), right(std::move(r)) {}
+    void print(int indent, std::ostream& to) const;
 };
 
 struct ast_map : public ast
@@ -112,6 +119,7 @@ struct ast_map : public ast
 
     ast_map(ast_ptr o, std::vector<branch_ptr> b)
         : to(std::move(o)), branches(std::move(b)) {}
+    void print(int indent, std::ostream& to) const;
 };
 
 struct pattern_var : public pattern
@@ -120,6 +128,7 @@ struct pattern_var : public pattern
 
     pattern_var(std::string v)
         : var(std::move(v)) {}
+    void print(std::ostream &to) const;
 };
 
 struct pattern_constr : public pattern
@@ -129,6 +138,7 @@ struct pattern_constr : public pattern
 
     pattern_constr(std::string c, std::vector<std::string> p)
         : constr(std::move(c)), params(std::move(p)) {}
+    void print(std::ostream &to) const;
 };
 
 struct definition_def : public definition
