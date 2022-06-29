@@ -4,6 +4,24 @@
 #include <fstream>
 #include <cstdio>
 #include <cstring>
+#include <algorithm>
+
+int name_idx = 0;
+
+std::string new_type_name()
+{
+    int temp = name_idx++;
+    std::string str = "";
+
+    while (temp != -1)
+    {
+        str += (char)('a' + (temp % 26));
+        temp = temp / 26 - 1;
+    }
+
+    std::reverse(str.begin(), str.end());
+    return str;
+}
 
 void yy::parser::error(const std::string &msg)
 {
@@ -110,15 +128,15 @@ int main(int argc, char *argv[])
             {
                 std::cout << "DEBUG | Comment." << std::endl;
 
-                definition_comment *def = dynamic_cast<definition_comment *>(curr_definition.get());
-                if (!def)
+                definition_comment *comment = dynamic_cast<definition_comment *>(curr_definition.get());
+                if (!comment)
                     continue;
 
-                std::string comment_body = def->text.substr(2, def->text.size() - 4);
+                std::string comment_body = comment->text.substr(2, comment->text.size() - 4);
                 std::string compiled_comment = "";
 
                 // check if this is a single or a multiline comment
-                if (def->text[1] == '/')
+                if (comment->text[1] == '/')
                 {
                     // it is a single line comment
                     compiled_comment = "--" + comment_body;
@@ -167,11 +185,43 @@ int main(int argc, char *argv[])
             else if (dynamic_cast<definition_data *>(curr_definition.get()))
             {
                 std::cout << "DEBUG | Data" << std::endl;
-                definition_data *def = dynamic_cast<definition_data *>(curr_definition.get());
-                if (!def)
+                definition_data *data = dynamic_cast<definition_data *>(curr_definition.get());
+                if (!data)
                     continue;
 
-                std::string compiled_data = "";
+                std::string compiled_data = "data ";
+                compiled_data = compiled_data + data->name + " = { ";
+                //
+                int is_first_constructor = 0;
+                // compile each constructor based on type
+                for (auto &constr : data->constructors)
+                {
+                    // only follow constructor with a comma
+                    // when not first or last of constructors
+                    if (is_first_constructor > 0 && is_first_constructor < data->constructors.size())
+                    {
+                        compiled_data = compiled_data + ", ";
+                    }
+
+                    // Is constructor only type Integer
+                    if (constr->name == "Integer")
+                    {
+                        // constructor is of basic type Integer
+                        compiled_data = compiled_data + new_type_name() + " :: Integer";
+                        is_first_constructor = false;
+                    }
+                    else
+                    {
+                        // constructor is of non basic type
+                        // it's a data structure -> should be of type Maybe
+                        compiled_data = compiled_data + new_type_name() + " :: Maybe " + constr->name;
+                        is_first_constructor = false;
+                    }
+                    // set index to next constructor
+                    is_first_constructor++;
+                }
+                // remeber to close the bracket
+                compiled_data = compiled_data + " }";
 
                 // write compiled comment to file
                 fputs(compiled_data.c_str(), output_file);
