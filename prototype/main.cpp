@@ -1,12 +1,17 @@
 #include "ast.hpp"
 #include "parser.hpp"
 #include <string>
+#include <fstream>
+#include <cstdio>
+#include <cstring>
 
 void yy::parser::error(const std::string &msg)
 {
     std::cout << "An error occured: " << msg << std::endl;
 }
 
+// input file
+extern FILE *yyin;
 extern std::vector<definition_ptr> program;
 
 int main(int argc, char *argv[])
@@ -31,28 +36,73 @@ int main(int argc, char *argv[])
         // exit showing error
         return 1;
         break;
-    case 2:
-        // two parameters detected
-        // asign input file path
-        input_file_path = argv[1];
-        // asign output file path
-        output_file_path = argv[2];
-        break;
     default:
         // there is at least one parameter
         // asume it is the path to input file
+
         // asign input file path
         input_file_path = argv[1];
-        // asign output file path
-        output_file_path = std::string("./default_out") + std::string(".") + std::string("hs");
-    }
+        // read from file
+        yyin = fopen(input_file_path.c_str(), "r");
 
+        // if the file does not exist
+        if (yyin == NULL)
+        {
+            // std::cout << "DEBUG | Input file is null after reading!" << std::endl;
+            std::cout << "Failed to read from input file!" << std::endl;
+            // close the file
+            fclose(yyin);
+            return 1;
+        }
+
+        // asign output file path
+        if (argc == 3)
+        {
+            output_file_path = argv[2];
+        }
+        else
+        {
+            output_file_path = std::string("..//haskell_out_files//default_out") + std::string(".") + std::string("hs");
+        }
+    }
     // DEBUGING
-    std::cout << "First parameter: " << input_file_path << std::endl;
-    std::cout << "Second parameter: " << output_file_path << std::endl;
+    std::cout << "DEBUG | First parameter: " << input_file_path << std::endl;
+    std::cout << "DEBUG | Second parameter: " << output_file_path << std::endl;
 
     // parse the input given to the program
     yy::parser parser;
     parser.parse();
-    std::cout << "Program size: " << program.size() << std::endl;
+    std::cout << "Valid definitions found in program: " << program.size() << std::endl;
+
+    // close input file
+    fclose(yyin);
+
+    // if the parsed program containes valid program
+    if (program.size() > 0)
+    {
+        std::cout << "DEBUG | The program is valid and is not empty." << std::endl;
+
+        // Write the compiled program to the output file
+        FILE *output_file = fopen(output_file_path.c_str(), "w");
+
+        // prepend module definition at the beggining of the file
+        std::string module_definition = "module Main where";
+        fputs(module_definition.c_str(), output_file);
+        // move writing head to new line
+        fputs("\n", output_file);
+
+        // add IO monad for printing main function output
+        std::string io_monad = "main :: IO ()";
+        fputs(io_monad.c_str(), output_file);
+        // move writing head to new line
+        fputs("\n", output_file);
+
+        // append the main class call with print
+        fputs("main = print ( 0 )", output_file);
+        // move writing head to new line
+        fputs("\n", output_file);
+
+        // close the output file
+        fclose(output_file);
+    }
 }
