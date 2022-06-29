@@ -39,7 +39,7 @@ Wykonaj skrypt kompilujący.
 Uruchom parser i wprowadź dane.
 
 ```sh
-./a.out
+./a.out ..//code_examples//good_1.txt ..//haskell_out_files//good_1.hs
 ```
 
 ## Przykłady składni języka "Rad" i odpowiedniki kodu w języku Haskell
