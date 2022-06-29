@@ -72,6 +72,8 @@ int main(int argc, char *argv[])
     // parse the input given to the program
     yy::parser parser;
     parser.parse();
+
+    // Display number of valid definitions parsed
     std::cout << "Valid definitions found in program: " << program.size() << std::endl;
 
     // close input file
@@ -89,18 +91,104 @@ int main(int argc, char *argv[])
         std::string module_definition = "module Main where";
         fputs(module_definition.c_str(), output_file);
         // move writing head to new line
-        fputs("\n", output_file);
+        fputs("\n\n", output_file);
 
         // add IO monad for printing main function output
         std::string io_monad = "main :: IO ()";
         fputs(io_monad.c_str(), output_file);
         // move writing head to new line
-        fputs("\n", output_file);
+        fputs("\n\n", output_file);
+
+        // main function body
+        std::string main_function_body = "";
+
+        // Here is where the magic happenes
+        for (auto &curr_definition : program)
+        {
+            // try casting the current definition dynamicly
+            if (dynamic_cast<definition_comment *>(curr_definition.get()))
+            {
+                std::cout << "DEBUG | Comment." << std::endl;
+
+                definition_comment *def = dynamic_cast<definition_comment *>(curr_definition.get());
+                if (!def)
+                    continue;
+
+                std::string comment_body = def->text.substr(2, def->text.size() - 4);
+                std::string compiled_comment = "";
+
+                // check if this is a single or a multiline comment
+                if (def->text[1] == '/')
+                {
+                    // it is a single line comment
+                    compiled_comment = "--" + comment_body;
+                }
+                else
+                {
+                    // it is a multiline comment
+                    compiled_comment = "{-" + comment_body + "-}";
+                }
+
+                // write compiled comment to file
+                fputs(compiled_comment.c_str(), output_file);
+                // move writing head to new line
+                fputs("\n\n", output_file);
+            }
+            else if (dynamic_cast<definition_def *>(curr_definition.get()))
+            {
+                std::cout << "DEBUG | Def." << std::endl;
+
+                definition_def *def = dynamic_cast<definition_def *>(curr_definition.get());
+                if (!def)
+                    continue;
+
+                // if this is the main function
+                if (def->name == "main")
+                {
+                    // save the function body for later in main function body
+                    main_function_body = "";
+                    std::cout << "DEBUG | Main function encountered! Saving body." << std::endl;
+                    // move to the next definition
+                    continue;
+                }
+
+                std::string compiled_def = def->name;
+
+                for (auto &param : def->params)
+                    compiled_def = compiled_def + " " + param;
+                compiled_def = compiled_def + " = ";
+                // def->body->print(1, std::cout);
+
+                // write compiled comment to file
+                fputs(compiled_def.c_str(), output_file);
+                // move writing head to new line
+                fputs("\n\n", output_file);
+            }
+            else if (dynamic_cast<definition_data *>(curr_definition.get()))
+            {
+                std::cout << "DEBUG | Data" << std::endl;
+                definition_data *def = dynamic_cast<definition_data *>(curr_definition.get());
+                if (!def)
+                    continue;
+
+                std::string compiled_data = "";
+
+                // write compiled comment to file
+                fputs(compiled_data.c_str(), output_file);
+                // move writing head to new line
+                fputs("\n\n", output_file);
+            }
+            else
+            {
+                std::cout << "DEBUG | This should never happen! Definition has no known type!" << std::endl;
+            }
+        }
+        // end off all magic (it newer was to begin with)
 
         // append the main class call with print
-        fputs("main = print ( 0 )", output_file);
+        fputs((std::string("main = print ( ") + main_function_body + std::string(" )")).c_str(), output_file);
         // move writing head to new line
-        fputs("\n", output_file);
+        fputs("\n\n", output_file);
 
         // close the output file
         fclose(output_file);
