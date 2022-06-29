@@ -30,7 +30,7 @@ to { return yy::parser::make_TO(); }
 ,  { return yy::parser::make_COMMA(); }
 -> { return yy::parser::make_ARROW(); }
 = { return yy::parser::make_EQUAL(); }
-[a-z][a-zA-Z]* { return yy::parser::make_LID(std::string(yytext)); }
-[A-Z][a-zA-Z]* { return yy::parser::make_UID(std::string(yytext)); }
+[a-z][_a-zA-Z]* { return yy::parser::make_LID(std::string(yytext)); }
+[A-Z][_a-zA-Z]* { return yy::parser::make_UID(std::string(yytext)); }
 
 %%
